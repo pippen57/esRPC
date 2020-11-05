@@ -40,4 +40,9 @@ public class Header {
      * 消息体长度
      */
     private Integer size;
+
+    public Header(short magic, byte version) {
+        this.magic = magic;
+        this.version = version;
+    }
 }

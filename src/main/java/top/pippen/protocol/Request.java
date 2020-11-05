@@ -13,7 +13,7 @@ public class Request {
     /**
      * 请求的Server类名
      */
-    private String serverName;
+    private String serviceName;
 
     /**
      * 请求的方法名
@@ -28,4 +28,10 @@ public class Request {
      * 请求方法
      */
     private Object[] args;
+
+    public Request(String serviceName, String methodName, Object[] args) {
+        this.serviceName = serviceName;
+        this.methodName = methodName;
+        this.args = args;
+    }
 }
