@@ -34,7 +34,8 @@ public class EsRpcEncoder extends MessageToByteEncoder<Message<Object>> {
         // 按照extraInfo部分指定的序列化方式和压缩方式进行处理
         Serialization serialization = SerializationFactory.get(header.getExtraInfo());
         Compressor compressor = CompressorFactory.get(header.getExtraInfo());
-        byte[] payload = compressor.compress(serialization.serialize(content));
+        byte[] serialize = serialization.serialize(content);
+        byte[] payload = compressor.compress(serialize);
         // 写入消息体长度
         out.writeInt(payload.length);
         // 写入消息体

@@ -2,13 +2,16 @@ package top.pippen.protocol;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 请求
+ *
  * @author Pippen
  * @created 2020/11/04 15:43
  */
 @Data
-public class Request {
+public class Request implements Serializable {
 
     /**
      * 请求的Server类名
@@ -33,5 +36,9 @@ public class Request {
         this.serviceName = serviceName;
         this.methodName = methodName;
         this.args = args;
+        this.argTypes = new Class[args.length];
+        for (int i = 0; i < args.length; i++) {
+            this.argTypes[i] = args[i].getClass();
+        }
     }
 }

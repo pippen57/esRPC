@@ -39,7 +39,8 @@ public class ZookeeperRegistry<T> implements Registry<T> {
     public void start() throws Exception {
         String root = "/es/rpc";
         // 初始化CuratorFramework
-        CuratorFramework client = CuratorFrameworkFactory.newClient(address, new ExponentialBackoffRetry(1000, 3));
+        CuratorFramework client = CuratorFrameworkFactory.newClient(address,
+                new ExponentialBackoffRetry(1000, 3));
         client.start();  // 启动Curator客户端
 
         // 初始化ServiceDiscovery
@@ -53,7 +54,6 @@ public class ZookeeperRegistry<T> implements Registry<T> {
         serviceCache = serviceDiscovery.serviceCacheBuilder()
                 .name("/esService")
                 .build();
-//        client.start(); // 启动Curator客户端
         client.blockUntilConnected();  // 阻塞当前线程，等待连接成功
         serviceDiscovery.start(); // 启动ServiceDiscovery
         serviceCache.start(); // 启动ServiceCache

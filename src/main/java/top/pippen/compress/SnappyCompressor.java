@@ -25,4 +25,10 @@ public class SnappyCompressor implements Compressor {
         }
         return Snappy.uncompress(array);
     }
+
+    public static void main(String[] args) throws IOException {
+        SnappyCompressor snappyCompressor = new SnappyCompressor();
+        byte[] compress = snappyCompressor.compress("pippen".getBytes());
+        System.out.println(compress);
+    }
 }

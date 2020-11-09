@@ -17,6 +17,7 @@ import top.pippen.Constants;
 import top.pippen.protocol.Header;
 import top.pippen.protocol.Message;
 import top.pippen.protocol.Request;
+import top.pippen.protocol.Response;
 import top.pippen.registry.Registry;
 import top.pippen.registry.ServerInfo;
 import top.pippen.transport.Connection;
@@ -26,7 +27,7 @@ import top.pippen.transport.NettyResponseFuture;
 /**
  * @author pippen
  */
-public class EsRpcProxy extends Constants implements InvocationHandler  {
+public class EsRpcProxy extends Constants implements InvocationHandler {
 
     /**
      * 需要代理服务接口名称
@@ -46,7 +47,7 @@ public class EsRpcProxy extends Constants implements InvocationHandler  {
         this.registry = registry;
     }
 
-    public static <T> T newInstance(Class<T> clazz, Registry<ServerInfo> registry) throws Exception {
+    public static <T> T newInstance(Class<T> clazz, Registry<ServerInfo> registry) {
         // 创建代理对象
         return (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
                 new Class[]{clazz},
@@ -60,7 +61,9 @@ public class EsRpcProxy extends Constants implements InvocationHandler  {
         List<ServiceInstance<ServerInfo>> serviceInstances =
                 registry.queryForInstances(serviceName);
         ServiceInstance<ServerInfo> serviceInstance =
-                serviceInstances.get(ThreadLocalRandom.current().nextInt(serviceInstances.size()));
+                serviceInstances.get(0);
+
+
         // 创建请求消息，然后调用remoteCall()方法请求上面选定的Server端
         String methodName = method.getName();
         Header header = headerCache.computeIfAbsent(method, h -> new Header(MAGIC, VERSION_1));
@@ -68,7 +71,7 @@ public class EsRpcProxy extends Constants implements InvocationHandler  {
         return remoteCall(serviceInstance.getPayload(), message);
     }
 
-    protected Object remoteCall(ServerInfo serverInfo, Message<Request>  message) throws Exception {
+    protected Object remoteCall(ServerInfo serverInfo, Message<Request> message) throws Exception {
         if (serverInfo == null) {
             throw new RuntimeException("get available server error");
         }
@@ -82,9 +85,10 @@ public class EsRpcProxy extends Constants implements InvocationHandler  {
             NettyResponseFuture responseFuture = connection.request(message, Constants.DEFAULT_TIMEOUT);
             // 等待请求对应的响应
             result = responseFuture.getPromise().get(Constants.DEFAULT_TIMEOUT, TimeUnit.MILLISECONDS);
+
         } catch (Exception e) {
             throw e;
         }
-        return result;
+        return ((Response) result).getResult();
     }
 }

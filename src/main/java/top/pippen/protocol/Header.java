@@ -3,6 +3,8 @@ package top.pippen.protocol;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  *                                          16 个字节
  * ----------------------------------------------------------------------------------------------------------------------
@@ -18,7 +20,7 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class Header {
+public class Header  implements Serializable {
 
     /**
      * 魔数

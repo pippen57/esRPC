@@ -2,13 +2,15 @@ package top.pippen.protocol;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 响应
  * @author Pippen
  * @created 2020/11/04 15:46
  */
 @Data
-public class Response {
+public class Response implements Serializable {
 
     /**
      * 响应错误码,正常响应为0,非0 标识异常响应

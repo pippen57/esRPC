@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 
-import com.sun.xml.internal.bind.v2.TODO;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.DefaultEventLoop;
 import io.netty.util.concurrent.DefaultPromise;

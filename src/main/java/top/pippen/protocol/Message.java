@@ -3,6 +3,8 @@ package top.pippen.protocol;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 消息
  * @author Pippen
@@ -10,7 +12,7 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class Message<T> {
+public class Message<T> implements Serializable {
     private Header header;
 
     private T content;

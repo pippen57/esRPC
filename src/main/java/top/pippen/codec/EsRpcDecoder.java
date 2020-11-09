@@ -9,6 +9,7 @@ import top.pippen.compress.CompressorFactory;
 import top.pippen.protocol.Header;
 import top.pippen.protocol.Message;
 import top.pippen.protocol.Request;
+import top.pippen.protocol.Response;
 import top.pippen.serialization.Serialization;
 import top.pippen.serialization.SerializationFactory;
 
@@ -58,8 +59,15 @@ public class EsRpcDecoder extends ByteToMessageDecoder {
                     SerializationFactory.get(extraInfo);
             Compressor compressor = CompressorFactory.get(extraInfo);
             // 经过解压缩和反序列化得到消息体
-            request = serialization.deSerialize(
-                    compressor.unCompress(payload), Request.class);
+            if (Constants.isRequest(extraInfo)) {
+                request = serialization.deSerialize(
+                        compressor.unCompress(payload), Request.class);
+            }else {
+                request = serialization.deSerialize(
+                        compressor.unCompress(payload), Response.class);
+            }
+
+
         }
         Header header = new Header(magic, version, extraInfo, messageId, size);
         Message<Object> message = new Message<>(header, request);
